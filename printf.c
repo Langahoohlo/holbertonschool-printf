@@ -82,17 +82,10 @@ int _printf(const char *format, ...) {
                         break;
 
                     case '%':
-                        if (strlen(format) > 2 && format[i + 1] != 's' && format[i - 1] != 's')
-                        {
-                            ptr[l] = '%';
+                        	ptr[l] = '%';
                             l++;
-                        } else if(strlen(format) == 2 || format[i + 1] != '%')
-                        {
-                            ptr[l] = '%';
-                            ptr[l + 1] = '%';
-                            l += 2;
-                        }
-
+							if (strlen(format) > 2)
+								i++;
                 }
                 break;
             default:
