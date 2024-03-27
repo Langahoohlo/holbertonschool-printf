@@ -98,7 +98,7 @@ int _printf(const char *format, ...)
     ptr[l] = '\0';
     for (l = 0; ptr[l]; l++)
         putchar(ptr[l]);
-	putchar('\n');
+
     free(ptr);
 	return (length);
 }
