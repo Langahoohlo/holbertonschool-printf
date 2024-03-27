@@ -10,8 +10,7 @@
  * Return: length of what is to be printed
  */
 
-int _printf(const char *format, ...)
-{
+int _printf(const char *format, ...) {
     int length = 0, i, j, k, l = 0;
     char *str, *ptr, c, nil[7] = "(null)";
     va_list args;
@@ -31,18 +30,21 @@ int _printf(const char *format, ...)
                         length++;
                         i++;
                         break;
-                    
+
                     case 's':
                         str = va_arg(args, char *);
-						if (str == NULL)
-							length += 6;
+                        if (str == NULL)
+                            length += 6;
                         else
                             length += strlen(str);
                         i++;
                         break;
 
-					case '%':
-						length += 2;
+                    case '%':
+                        if (strlen(format) > 2)
+                            length++;
+                        else
+                            length += 2;
                 }
                 break;
                 default:
@@ -67,23 +69,30 @@ int _printf(const char *format, ...)
                         l++;
                         i++;
                         break;
-                    
+
                     case 's':
                         str = va_arg(arg, char *);
-						if (str == NULL)
-							for (j = 0; nil[j]; j++, l++)
-								ptr[l] = nil[j];
-						else
-                        	for (j = 0; str[j]; j++, l++)
-                            	ptr[l] = str[j];
-                        i++;    
+                        if (str == NULL)
+                            for (j = 0; nil[j]; j++, l++)
+                                ptr[l] = nil[j];
+                        else
+                            for (j = 0; str[j]; j++, l++)
+                                ptr[l] = str[j];
+                        i++;
                         break;
 
-					case '%':
-						ptr[l] = '%';
-						ptr[l + 1] = '%';
-						l += 2;
-                        
+                    case '%':
+                        if (strlen(format) > 2 && format[i + 1] != 's' && format[i - 1] != 's')
+                        {
+                            ptr[l] = '%';
+                            l++;
+                        } else if(strlen(format) == 2 || format[i + 1] != '%')
+                        {
+                            ptr[l] = '%';
+                            ptr[l + 1] = '%';
+                            l += 2;
+                        }
+
                 }
                 break;
             default:
@@ -98,7 +107,6 @@ int _printf(const char *format, ...)
     ptr[l] = '\0';
     for (l = 0; ptr[l]; l++)
         putchar(ptr[l]);
-
     free(ptr);
-	return (length);
+    return (length);
 }
