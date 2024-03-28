@@ -59,7 +59,7 @@ int _printf(const char *format, ...)
     int length = 0, i;
     va_list args;
     if (format == NULL)
-        return (0);
+        return (-1);
     va_start(args, format);
     for (i = 0; format[i]; i++)
     {
