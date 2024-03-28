@@ -53,7 +53,7 @@ int handle_mod(int n, int length)
     else
     {
         putchar('%');
-        putchar('%');
+        /*putchar('%');*/
         length += 2;
         return (length);
     }
