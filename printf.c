@@ -2,136 +2,149 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+
 /**
  * print_char - print a character to stdout
- * @c: character to be pribted to stdout
+ * @c: character to be printed out
  * @length: length of what is to be printed
+ * Return: length
  */
-int print_char(char c, int length)
+
+int print_char(va_list args, const char *format, int length, int pos)
 {
-    putchar(c);
-    length++;
-    return (length);
+	int i;
+
+	for (i = 0; format[i]; i++)
+	{
+		if (i == pos)
+		{
+			if (format[i] == '\0')
+				return (length);
+			putchar(va_arg(args, int));
+			return (length + 1);
+		}
+	}
+	return (length);
 }
+
 /**
  * print_string - print a string to stdout
- * @str: pointer to a string thats to be printed
- * @length: length of what is to be printed
- * Return: pointer
+ * @str: pointer to a string that's to be printed
+ * @length: length of what is going to be printed
+ * Return: length
  */
-int print_string(const char *str, int length)
+
+int print_string(va_list args, const char *format, int length, int pos)
 {
-    int i;
-    char nil[7] = "(null)";
-    if (str != NULL)
-    {
-        for (i = 0; str[i]; i++)
-            putchar(str[i]);
-        length += i;
-        return (length);
-    }
-    else
-    {
-        for (i = 0; nil[i]; i++)
-            putchar(nil[i]);
-        length += 6;
-        return (length);
-    }
+	int i, j;
+	char nil[7] = "(null)", *str;
+
+	for (j = 0; format[j]; j++)
+	{
+		str = va_arg(args, char *);
+		if (str != NULL)
+		{
+			if (j == pos)
+			{
+				for (i= 0; str[i]; i++)
+					putchar(str[i]);
+				length += i;
+				return (length);
+			}
+		}
+		if (i == pos)
+		{
+			for (i = 0; nil[i]; i++)
+				putchar(nil[i]);
+			length += 6;
+			return (length);
+		}
+	}
+	return (length);
 }
-/**
- * handle_mod - handle modulas sign
- * @length: length of what is to be printed
- * @n: used to determine whether to print two modulo signs or just one
- */
-int handle_mod(int length)
-{
-    putchar('%');
-    length++;
-    return (length);
-}
-
-int print_int(int num, int length)
-{
-    int i;
-    char number[100];
-
-    sprintf(number, "%d", num);
-    for (i = 0; number[i]; i++)
-        putchar(number[i]);
-    length += i;
-
-    return (length);
-}
-
 
 /**
- * _printf - print arguments
- * @format: pointer to character
- * Return: length of what is to be printed
+ * handle_mod - handle modulo sign
+ * @length: length of what is to be printed
+ * Return: length
  */
+
+int handle_mod (va_list args, const char *format, int length, int pos)
+{
+	(void) format;
+	(void) args;
+	(void) pos;
+
+	putchar('%');
+	return (length + 1);
+}
+
+/**
+ * print_int - handles printing numbers
+ * @num: number that's to be printed
+ * @length: length of what is to be printed ouit to stdout
+ * Return: length
+ */
+
+int print_int(va_list args, const char *format, int length, int pos)
+{
+	int i, j, num;
+	char number[100];
+
+	for (j = 0; format[j]; j++)
+	{
+		num = va_arg(args, int);
+		if (j == pos)
+		{
+			sprintf(number, "%d", num);
+			for (i = 0; number[i]; i++)
+				putchar(number[i]);
+			length += i;
+			return (length);
+		}
+	}
+	return (length);
+}
+
+/**
+ * _printf - print argument according to format specifier
+ * @format: what should be printed
+ * Return: length
+ */
+
 int _printf(const char *format, ...)
 {
-    int length = 0, i;
-    va_list args;
-    if (format == NULL)
-        return (-1);
-    va_start(args, format);
-    for (i = 0; format[i]; i++)
-    {
-        switch (format[i])
-        {
-        case '%':
-            switch (format[i + 1])
-            {
-            case 'c':
-                length = print_char(va_arg(args, int), length);
-                i++;
-                break;
-            case 's':
-                length = print_string(va_arg(args, char *), length);
-                i++;
-                break;
+	int i, j, length = 0;
+	va_list args;
+	spec format_spec[] = {
+		{"c", print_char},
+		{"s", print_string},
+		{"%", handle_mod},
+		{"i", print_int},
+		{"d", print_int}, 
+		{NULL, NULL}
+	};
 
-            case 'i':
-            case 'd':
-                length = print_int(va_arg(args, int), length);
-                i++;
-                break;
-
-            case '%':
-                if (strlen(format) > 2)
-                {
-                    length = handle_mod(length);
-                    i++;
-                }
-                break;
-            case '\0':
-                if (strlen(format) == 2)
-                    length = print_char(format[i], length);
-                else
-                {
-                    length = 0;
-                    return (1);
-                }
-                break;
-
-            default:
-                print_string(format, length);
-                i += 2;
-                break;
-            }
-            break;
-        default:
-            if (format[i] == '%')
-            {
-                length = 0;
-            }
-            else
-                length = print_char(format[i], length);
-            break;
-        }
-    }
-    va_end(args);
-    return (length);
+	va_start(args, format);
+	if (format == NULL)
+		return (-1);
+	for (i = 0; format[i]; i++)
+	{
+		if (format[i] == '%')
+		{
+			for (j = 0; format_spec[j].specifier[0] != NULL)
+			{
+				if (format[i + 1] == format_spec[j].specifier[0])
+					length = format_spec[j].func(args, format, length, i);
+				else
+					return (length);
+			}
+			i++;
+		} else
+		{
+			putchar(format[i]);
+			length++;
+		}
+	}
+	return (length);
 }
