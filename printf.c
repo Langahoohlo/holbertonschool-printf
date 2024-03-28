@@ -42,32 +42,7 @@ int print_string(char *str, int length)
  * @length: length of what is to be printed
  * @n: used to determine whether to print two modulo signs or just one
 */
-// int handle_mod(const char *format,int j) 
-// {
-// 	int i;
 
-// 	for (i = 0; format[i]; i++)
-// 		if (format[j + 2] == '\0');
-// 		{
-// 			putchar('%');
-// 			putchar('%');
-// 			i++;
-// 			return (j);
-// 		}
-    // if 
-    // {
-    //     putchar('%');
-    //     length++;
-    //     return (length);
-    // }
-    // else
-    // {
-    //     putchar('%');
-    //     putchar('%');
-    //     length += 2;
-    //     return (length);
-    // }
-// }
 /**
  * _printf - print arguments
  * @format: pointer to character
@@ -75,7 +50,6 @@ int print_string(char *str, int length)
  */
 int _printf(const char *format, ...) {
     int length = 0, i;
-    char *str;
     va_list args;
     if (format == NULL)
         return (0);
@@ -100,8 +74,6 @@ int _printf(const char *format, ...) {
                         break;
                     case '%':
                         putchar('%');
-                        // else
-                        //     length = handle_mod(2, length, args);
                 }
                 break;
                 default:
@@ -113,6 +85,5 @@ int _printf(const char *format, ...) {
         }
     }
     va_end(args);
-    // printf("%d", length);
     return (length);
 }
