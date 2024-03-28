@@ -87,10 +87,7 @@ int _printf(const char *format, ...)
 		if (strlen(format) == 2)
                 	length = print_char(format[i], length);
 		else
-		{
-			putchar('w');
-			return (1);
-		}
+			return (0);
                 break;
 
             default:
