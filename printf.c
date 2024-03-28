@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 /**
  * print_char - print a character to stdout
  * @c: character to be pribted to stdout
@@ -49,6 +50,21 @@ int handle_mod(int length)
     length++;
     return (length);
 }
+
+int print_int(int num, int length)
+{
+    int i;
+    char number[100];
+
+    sprintf(number, "%d", num);
+    for (i = 0; number[i]; i++)
+        putchar(number[i]);
+    length += i;
+
+    return (length);
+}
+
+
 /**
  * _printf - print arguments
  * @format: pointer to character
@@ -76,6 +92,13 @@ int _printf(const char *format, ...)
                 length = print_string(va_arg(args, char *), length);
                 i++;
                 break;
+
+            case 'i':
+            case 'd':
+                length = print_int(va_arg(args, int), length);
+                i++;
+                break;
+
             case '%':
                 if (strlen(format) > 2)
                 {
@@ -84,8 +107,13 @@ int _printf(const char *format, ...)
                 }
                 break;
             case '\0':
-		if (strlen(format) == 2)
-                	length = print_char(format[i], length);
+                if (strlen(format) == 2)
+                    length = print_char(format[i], length);
+                else
+                {
+                    length = 0;
+                    return (1);
+                }
                 break;
 
             default:
@@ -97,7 +125,7 @@ int _printf(const char *format, ...)
         default:
             if (format[i] == '%')
             {
-                length--;
+                length = 0;
             }
             else
                 length = print_char(format[i], length);
