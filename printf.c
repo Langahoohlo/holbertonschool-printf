@@ -38,12 +38,6 @@ int print_string(char *str, int length)
     }
 }
 /**
- * handle_mod - handle modulas sign
- * @length: length of what is to be printed
- * @n: used to determine whether to print two modulo signs or just one
-*/
-
-/**
  * _printf - print arguments
  * @format: pointer to character
  * Return: length of what is to be printed
@@ -55,12 +49,6 @@ int _printf(const char *format, ...) {
         return (0);
     va_start(args, format);
     for (i = 0; format[i]; i++) {
-
-		if (format[i] == '%' && format[i+1] == '%' && strlen(format) < 2)
-		{
-			putchar('%');
-			length++;
-		}
         switch(format[i]) {
             case '%':
                 switch(format[i + 1]) {
@@ -73,7 +61,13 @@ int _printf(const char *format, ...) {
                         i++;
                         break;
                     case '%':
-                        putchar('%');
+                        print_char(format[i], length);
+			break;
+                            
+
+					default:
+						print_char(format[i], length);
+						i++;
                 }
                 break;
                 default:
