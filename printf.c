@@ -88,7 +88,7 @@ int _printf(const char *format, ...)
 		if (strlen(format) == 2)
                 	length = print_char(format[i], length);
 		else 
-			length = NAN;
+			(float) length = NAN;
                 break;
 
             default:
