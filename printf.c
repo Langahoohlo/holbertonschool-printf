@@ -84,7 +84,10 @@ int _printf(const char *format, ...)
                 }
                 break;
             case '\0':
-                length = print_char(format[i], length);
+		if (strlen(format) == 2)
+                	length = print_char(format[i], length);
+		else
+			return (1);
                 break;
 
             default:
