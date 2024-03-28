@@ -56,7 +56,7 @@ int handle_mod(int length)
  */
 int _printf(const char *format, ...)
 {
-    int length, i;
+    int length = 0, i;
     va_list args;
     if (format == NULL)
         return (-1);
@@ -85,7 +85,9 @@ int _printf(const char *format, ...)
                 break;
             case '\0':
 		if (strlen(format) == 2)
-                	length = print_char(format[i], length);	
+                	length = print_char(format[i], length);
+		else 
+			length = NULL;
                 break;
 
             default:
@@ -105,6 +107,5 @@ int _printf(const char *format, ...)
         }
     }
     va_end(args);
-    
     return (length);
 }
