@@ -2,104 +2,103 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include "main.h"
-
+/**
+ * print_char - print a character to stdout
+ * @c: character to be pribted to stdout
+ * @length: length of what is to be printed
+*/
+int print_char(char c, int length)
+{
+    putchar(c);
+    length++;
+    return (length);
+}
+/**
+ * print_string - print a string to stdout
+ * @str: pointer to a string thats to be printed
+ * @length: length of what is to be printed
+ * Return: pointer
+*/
+int print_string(char *str, int length)
+{
+    int i;
+    char nil[7] = "(null)";
+    if (str != NULL)
+    {
+        for (i = 0; str[i]; i++)
+            putchar(str[i]);
+        length += i;
+        return (length);
+    } else
+    {
+        for (i = 0; nil[i]; i++)
+            putchar(nil[i]);
+        length += 6;
+        return (length);
+    }
+}
+/**
+ * handle_mod - handle modulas sign
+ * @length: length of what is to be printed
+ * @n: used to determine whether to print two modulo signs or just one
+*/
+int handle_mod(int n, int length)
+{
+    if (n == 1)
+    {
+        putchar('%');
+        length++;
+        return (length);
+    }
+    else
+    {
+        putchar('%');
+        putchar('%');
+        length += 2;
+        return (length);
+    }
+}
 /**
  * _printf - print arguments
  * @format: pointer to character
  * Return: length of what is to be printed
  */
-
 int _printf(const char *format, ...) {
-    int length = 0, i, j, k, l = 0;
-    char *str, *ptr, c, nil[7] = "(null)";
+    int length = 0, i;
     va_list args;
-    va_list arg;
-
     if (format == NULL)
         return (0);
-
     va_start(args, format);
-
     for (i = 0; format[i]; i++) {
         switch(format[i]) {
             case '%':
                 switch(format[i + 1]) {
                     case 'c':
-                        va_arg(args, int);
-                        length++;
+                        length = print_char(va_arg(args, int), length);
                         i++;
                         break;
-
                     case 's':
-                        str = va_arg(args, char *);
-                        if (str == NULL)
-                            length += 6;
-                        else
-                            length += strlen(str);
+                        length = print_string(va_arg(args, char *), length);
                         i++;
                         break;
-
                     case '%':
                         if (strlen(format) > 2)
-                            length++;
+                        {
+                            length = handle_mod(1, length);
+                            i++;
+                        }
                         else
-                            length += 2;
+                            length = handle_mod(2, length);
                 }
                 break;
                 default:
                         if (format[i] == '%')
                             length--;
                         else
-                            length++;
+                            length = print_char(format[i], length);
                         break;
         }
     }
     va_end(args);
-
-    ptr = malloc(length * sizeof(char));
-    va_start(arg, format);
-    for (i = 0, l = 0, k = 0; format[i]; i++) {
-        switch(format[i]) {
-            case '%':
-                switch(format[i + 1]) {
-                    case 'c':
-                        c = va_arg(arg, int);
-                        ptr[l] = c;
-                        l++;
-                        i++;
-                        break;
-
-                    case 's':
-                        str = va_arg(arg, char *);
-                        if (str == NULL)
-                            for (j = 0; nil[j]; j++, l++)
-                                ptr[l] = nil[j];
-                        else
-                            for (j = 0; str[j]; j++, l++)
-                                ptr[l] = str[j];
-                        i++;
-                        break;
-
-                    case '%':
-                        	ptr[l] = '%';
-                            l++;
-							if (strlen(format) > 2)
-								i++;
-                }
-                break;
-            default:
-                if (format[i - 1] != '%') {
-                    k = l;
-                    ptr[k] = format[i];
-                    l++;
-                }
-                break;
-        }
-    }
-    ptr[l] = '\0';
-    for (l = 0; ptr[l]; l++)
-        putchar(ptr[l]);
-    free(ptr);
     return (length);
 }
