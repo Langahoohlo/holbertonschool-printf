@@ -92,7 +92,7 @@ int _printf(const char *format, ...)
 
             default:
                 print_string(format, length);
-                i++;
+                i += 2;
                 break;
             }
             break;
