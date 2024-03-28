@@ -42,22 +42,32 @@ int print_string(char *str, int length)
  * @length: length of what is to be printed
  * @n: used to determine whether to print two modulo signs or just one
 */
-int handle_mod(int n, int length)
-{
-    if (n == 1)
-    {
-        putchar('%');
-        length++;
-        return (length);
-    }
-    else
-    {
-        putchar('%');
-        /*putchar('%');*/
-        length += 2;
-        return (length);
-    }
-}
+// int handle_mod(const char *format,int j) 
+// {
+// 	int i;
+
+// 	for (i = 0; format[i]; i++)
+// 		if (format[j + 2] == '\0');
+// 		{
+// 			putchar('%');
+// 			putchar('%');
+// 			i++;
+// 			return (j);
+// 		}
+    // if 
+    // {
+    //     putchar('%');
+    //     length++;
+    //     return (length);
+    // }
+    // else
+    // {
+    //     putchar('%');
+    //     putchar('%');
+    //     length += 2;
+    //     return (length);
+    // }
+// }
 /**
  * _printf - print arguments
  * @format: pointer to character
@@ -65,11 +75,18 @@ int handle_mod(int n, int length)
  */
 int _printf(const char *format, ...) {
     int length = 0, i;
+    char *str;
     va_list args;
     if (format == NULL)
         return (0);
     va_start(args, format);
     for (i = 0; format[i]; i++) {
+
+		if (format[i] == '%' && format[i+1] == '%' && strlen(format) < 2)
+		{
+			putchar('%');
+			length++;
+		}
         switch(format[i]) {
             case '%':
                 switch(format[i + 1]) {
@@ -82,13 +99,9 @@ int _printf(const char *format, ...) {
                         i++;
                         break;
                     case '%':
-                        if (strlen(format) > 2)
-                        {
-                            length = handle_mod(1, length);
-                            i++;
-                        }
-                        else
-                            length = handle_mod(2, length);
+                        putchar('%');
+                        // else
+                        //     length = handle_mod(2, length, args);
                 }
                 break;
                 default:
@@ -100,5 +113,6 @@ int _printf(const char *format, ...) {
         }
     }
     va_end(args);
+    // printf("%d", length);
     return (length);
 }
