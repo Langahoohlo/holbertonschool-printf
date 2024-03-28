@@ -88,8 +88,8 @@ int _printf(const char *format, ...)
                 	length = print_char(format[i], length);
 		else
 		{
-			putchar(format[i]);
-			length++;
+			length = 0;
+			return (1);
 		}	
                 break;
 
