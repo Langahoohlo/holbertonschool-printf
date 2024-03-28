@@ -87,7 +87,10 @@ int _printf(const char *format, ...)
 		if (strlen(format) == 2)
                 	length = print_char(format[i], length);
 		else
-			return (0);
+		{
+			putchar(format[i]);
+			length++;
+		}	
                 break;
 
             default:
