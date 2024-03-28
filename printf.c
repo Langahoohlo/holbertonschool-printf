@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -87,8 +86,6 @@ int _printf(const char *format, ...)
             case '\0':
 		if (strlen(format) == 2)
                 	length = print_char(format[i], length);
-		else 
-			 return (NAN);
                 break;
 
             default:
