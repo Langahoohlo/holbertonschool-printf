@@ -56,7 +56,7 @@ int handle_mod(int length)
  */
 int _printf(const char *format, ...)
 {
-    int length = 0, i;
+    int length, i;
     va_list args;
     if (format == NULL)
         return (-1);
