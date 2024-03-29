@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include "main.h"
 
 /**
  * print_char - print a character to stdout
- * @c: character to be printed out
+ * @args: list of argumetns from printf
  * @length: length of what is to be printed
  * Return: length
  */
@@ -19,7 +20,7 @@ int print_char(va_list args, int length)
 
 /**
  * print_string - print a string to stdout
- * @str: pointer to a string that's to be printed
+ * @args: list of argumetns from printf
  * @length: length of what is going to be printed
  * Return: length
  */
@@ -32,7 +33,7 @@ int print_string(va_list args, int length)
 	str = va_arg(args, char *);
 	if (str != NULL)
 	{
-		for (i= 0; str[i]; i++)
+		for (i = 0; str[i]; i++)
 			putchar(str[i]);
 		length += i;
 		return (length);
@@ -45,11 +46,12 @@ int print_string(va_list args, int length)
 
 /**
  * handle_mod - handle modulo sign
+ * @args: list of argumetns from printf
  * @length: length of what is to be printed
  * Return: length
  */
 
-int handle_mod (va_list args, int length)
+int handle_mod(va_list args, int length)
 {
 	(void) args;
 
@@ -59,7 +61,7 @@ int handle_mod (va_list args, int length)
 
 /**
  * print_int - handles printing numbers
- * @num: number that's to be printed
+ * @args: list of argumetns from printf
  * @length: length of what is to be printed ouit to stdout
  * Return: length
  */
@@ -91,7 +93,7 @@ int _printf(const char *format, ...)
 		{"s", print_string},
 		{"%", handle_mod},
 		{"i", print_int},
-		{"d", print_int}, 
+		{"d", print_int},
 		{NULL, NULL}
 	};
 
@@ -109,12 +111,14 @@ int _printf(const char *format, ...)
 				if (format[i + 1] == format_spec[j].specifier[0])
 				{
 					length = format_spec[j].func(args, length);
+					i++;
 					break;
 				}
 			}
-			i++;
 		} else
 		{
+			if (i == 1)
+				return (write(1, format, strlen(format)));
 			putchar(format[i]);
 			length++;
 		}
