@@ -103,7 +103,7 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			if (strlen(format) < 2 && format[i] == '%')
-				return (length + 1);
+				return (-1);
 			for (j = 0; format_spec[j].specifier != NULL; j++)
 			{
 				if (format[i + 1] == format_spec[j].specifier[0])
