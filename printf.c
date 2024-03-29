@@ -11,21 +11,10 @@
  * Return: length
  */
 
-int print_char(va_list args, const char *format, int length, int pos)
+int print_char(va_list args, int length)
 {
-	int i;
-
-	for (i = 0; format[i]; i++)
-	{
-		if (i == pos)
-		{
-			if (format[i] == '\0')
-				return (length);
-			putchar(va_arg(args, int));
-			return (length + 1);
-		}
-	}
-	return (length);
+	putchar(va_arg(args, int));
+	return (length + 1);
 }
 
 /**
@@ -35,32 +24,22 @@ int print_char(va_list args, const char *format, int length, int pos)
  * Return: length
  */
 
-int print_string(va_list args, const char *format, int length, int pos)
+int print_string(va_list args, int length)
 {
-	int i, j;
+	int i;
 	char nil[7] = "(null)", *str;
 
-	for (j = 0; format[j]; j++)
+	str = va_arg(args, char *);
+	if (str != NULL)
 	{
-		str = va_arg(args, char *);
-		if (str != NULL)
-		{
-			if (j == pos)
-			{
-				for (i= 0; str[i]; i++)
-					putchar(str[i]);
-				length += i;
-				return (length);
-			}
-		}
-		if (j == pos)
-		{
-			for (i = 0; nil[i]; i++)
-				putchar(nil[i]);
-			length += 6;
-			return (length);
-		}
+		for (i= 0; str[i]; i++)
+			putchar(str[i]);
+		length += i;
+		return (length);
 	}
+	for (i = 0; nil[i]; i++)
+		putchar(nil[i]);
+	length += 6;
 	return (length);
 }
 
@@ -70,11 +49,9 @@ int print_string(va_list args, const char *format, int length, int pos)
  * Return: length
  */
 
-int handle_mod (va_list args, const char *format, int length, int pos)
+int handle_mod (va_list args, int length)
 {
-	(void) format;
 	(void) args;
-	(void) pos;
 
 	putchar('%');
 	return (length + 1);
@@ -87,23 +64,15 @@ int handle_mod (va_list args, const char *format, int length, int pos)
  * Return: length
  */
 
-int print_int(va_list args, const char *format, int length, int pos)
+int print_int(va_list args, int length)
 {
-	int i, j, num;
+	int i;
 	char number[100];
 
-	for (j = 0; format[j]; j++)
-	{
-		num = va_arg(args, int);
-		if (j == pos)
-		{
-			sprintf(number, "%d", num);
-			for (i = 0; number[i]; i++)
-				putchar(number[i]);
-			length += i;
-			return (length);
-		}
-	}
+	sprintf(number, "%d", va_arg(args, int));
+	for (i = 0; number[i]; i++)
+		putchar(number[i]);
+	length += i;
 	return (length);
 }
 
@@ -133,11 +102,15 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
+			if (strlen(format) < 2 && format[i] == '%')
+				return (length);
 			for (j = 0; format_spec[j].specifier != NULL; j++)
 			{
 				if (format[i + 1] == format_spec[j].specifier[0])
-					length = format_spec[j].func(args, format, length, i);
-				break;
+				{
+					length = format_spec[j].func(args, length);
+					break;
+				}
 			}
 			i++;
 		} else
