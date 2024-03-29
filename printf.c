@@ -117,7 +117,7 @@ int _printf(const char *format, ...)
 			}
 		} else
 		{
-			if (i == 1)
+			if (i == 1 && strlen(format) <= 3)
 				return (write(1, format, strlen(format)));
 			putchar(format[i]);
 			length++;
