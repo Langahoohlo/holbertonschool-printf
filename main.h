@@ -2,15 +2,15 @@
 #define MAIN_H
 
 int _printf(const char *format, ...);
-int print_char(char c, int length);
-int print_string(const char *str, int length);
-int handle_mod(int length);
-int print_int(int num, int length);
+int print_char(va_list, const char *format, int length, int pos);
+int print_string(va_list, const char *format, int length, int pos);
+int handle_mod(va_list, const char *format, int length, int pos);
+int print_int(va_list, const char *format, int length, int pos);
 
-typedef struct format_specifier
+typedef struct
 {
 	char *specifier;
-	int (*func)(va_list, const char *format, int length);
+	int (*func)(va_list, const char *format, int length, int pos);
 } spec;
 
 #endif /* MAIN_H */

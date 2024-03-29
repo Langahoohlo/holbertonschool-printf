@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include "main.h"
 
 /**
  * print_char - print a character to stdout
@@ -52,7 +53,7 @@ int print_string(va_list args, const char *format, int length, int pos)
 				return (length);
 			}
 		}
-		if (i == pos)
+		if (j == pos)
 		{
 			for (i = 0; nil[i]; i++)
 				putchar(nil[i]);
@@ -132,7 +133,7 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			for (j = 0; format_spec[j].specifier[0] != NULL)
+			for (j = 0; format_spec[j].specifier != NULL; j++)
 			{
 				if (format[i + 1] == format_spec[j].specifier[0])
 					length = format_spec[j].func(args, format, length, i);
