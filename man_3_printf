@@ -1,0 +1,62 @@
+.\" Manpage for _printf.
+.\" Contact langahoohlo@live.com, kamohelokoali201@gmail.com, khibakoenane@gmail.com, 
+m.tross404@gmail.com, ntjalebohang@yahoo.com, ntleledavid07@gmail.com.
+.TH man_3_printf "28 March 2024" "1.0" "_printf man page"
+
+.SH NAME
+_printf \- formatted output conversion
+
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
+#include "main.h"
+
+int _printf(const char *format, ...);
+
+int print_char(va_list args, int length);
+int print_string(va_list args, int length);
+int handle_mod(va_list args, int length);
+int print_int(va_list args, int length);
+.fi
+
+.SH DESCRIPTION
+The _printf() function writes formatted output to stdout, the standard output stream.
+
+The format string controls the output format. It may contain ordinary characters, which are copied unchanged to the output stream, and conversion specifications, each of which results in fetching zero or more subsequent arguments.
+
+.SH RETURN VALUE
+Upon successful completion, the _printf() function returns the number of characters printed (excluding the null byte used to end output to strings). If an output error is encountered, a negative value is returned.
+
+.SH FORMAT SPECIFIERS
+The following format specifiers are supported:
+
+%c - Print a single character.
+%s - Print a string.
+%% - Print a percent sign.
+%i - Print an integer.
+%d - Print an integer.
+
+Unsupported format specifiers will be printed out as they are.
+
+.SH EXAMPLES
+_printf("Hello, world!\n");
+Output : Hello world
+
+int num = 42;
+_printf("The answer is %d.\n", num);
+Output: The answer is 42
+
+.SH SEE ALSO
+sprintf(3), va_list(3), strlen(3)
+Used functions in our _printf function
+
+.SH AUTHOR
+This manual page was written by Langa Hoohlo, Kamohelo Koali, Khiba Koenane, Mthawelanga Matross, Lebohang, Pheello Ntlele
+
+.SH REPORTING BUGS
+Report bugs to langahoohlo@live.com, kamohelokoali201@gmail.com, khibakoenane@gmail.com, m.tross404@gmail.com, ntjalebohang@yahoo.com, ntleledavid07@gmail.com.
+
+
