@@ -137,8 +137,7 @@ int _printf(const char *format, ...)
 			{
 				if (format[i + 1] == format_spec[j].specifier[0])
 					length = format_spec[j].func(args, format, length, i);
-				else
-					return (length);
+				break;
 			}
 			i++;
 		} else
